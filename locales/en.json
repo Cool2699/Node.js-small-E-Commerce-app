@@ -1,3 +1,5 @@
 {
-    "healthy": "Healthy"
+    "healthy": "Healthy",
+    "categoryNameValidation": "Category must be at least 3 characters long",
+    "noCategories": "No categories"
 }

@@ -4,6 +4,9 @@ require("dotenv").config();
 const i18next = require("i18next");
 const backend = require("i18next-fs-backend");
 const middleware = require("i18next-http-middleware");
+const cors = require("cors");
+
+const categoryRouter = require("./routes/category.route");
 
 i18next
     .use(backend)
@@ -19,8 +22,18 @@ const app = express();
 const port = process.env.PORT;
 const api = process.env.API;
 
-app.use(middleware.handle(i18next))
+app.use(middleware.handle(i18next));
+app.use(
+    cors({
+        origin: ["http://localhost:3000"],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        credentials: true,
+        allowedHeaders: ["Content-Type", "Authorization", "Accept-Language"],
+    })
+);
+app.use(express.json());
 
+app.use(`${api}/categories`, categoryRouter);
 app.get(`${api}/health`, (req, res) => {
     res.send(req.t("healthy"));
 });
