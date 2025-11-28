@@ -1,7 +1,7 @@
-const express = require("express");
-const { Category } = require("../models/category.model");
+import { Router } from "express";
+import { Category } from "../models/category.model.js";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/", async (req, res) => {
     try {
@@ -53,4 +53,4 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

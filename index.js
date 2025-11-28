@@ -1,16 +1,17 @@
-const express = require("express");
-const mongoose = require("mongoose");
-require("dotenv").config();
-const i18next = require("i18next");
-const backend = require("i18next-fs-backend");
-const middleware = require("i18next-http-middleware");
-const cors = require("cors");
+import express, { json } from "express";
+import { connect } from "mongoose";
+import dotenv from "dotenv";
+import i18next, { use } from "i18next";
+import backend from "i18next-fs-backend";
+import { LanguageDetector, handle } from "i18next-http-middleware";
+import cors from "cors";
+import morgan from "morgan";
 
-const categoryRouter = require("./routes/category.route");
+import categoryRouter from "./routes/category.route.js";
 
-i18next
-    .use(backend)
-    .use(middleware.LanguageDetector)
+dotenv.config();
+use(backend)
+    .use(LanguageDetector)
     .init({
         fallbackLng: "en",
         backend: {
@@ -22,7 +23,7 @@ const app = express();
 const port = process.env.PORT;
 const api = process.env.API;
 
-app.use(middleware.handle(i18next));
+app.use(handle(i18next));
 app.use(
     cors({
         origin: ["http://localhost:3000"],
@@ -31,15 +32,15 @@ app.use(
         allowedHeaders: ["Content-Type", "Authorization", "Accept-Language"],
     })
 );
-app.use(express.json());
+app.use(json());
+app.use(morgan("tiny")); //Adds a log line for each request, like GET /api/v1/categories 200 183 - 160.765 ms
 
 app.use(`${api}/categories`, categoryRouter);
 app.get(`${api}/health`, (req, res) => {
     res.send(req.t("healthy"));
 });
 
-mongoose
-    .connect(process.env.CONNECTION_STRING)
+connect(process.env.CONNECTION_STRING)
     .then(() => {
         console.log("Connected to MongoDB");
     })

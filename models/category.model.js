@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const categorySchema = mongoose.Schema({
+const categorySchema = Schema({
     name: String,
 });
 
@@ -12,4 +12,4 @@ categorySchema.set("toJSON", {
     virtuals: true,
 });
 
-exports.Category = mongoose.model("Category", categorySchema);
+export const Category = model("Category", categorySchema);
