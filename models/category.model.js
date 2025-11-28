@@ -1,15 +1,10 @@
 import { Schema, model } from "mongoose";
+import { addCommonVirtuals } from "../helpers/mongoose-plugin.js";
 
 const categorySchema = Schema({
     name: String,
 });
 
-categorySchema.virtual("id").get(function () {
-    return this._id.toHexString();
-});
-
-categorySchema.set("toJSON", {
-    virtuals: true,
-});
+categorySchema.plugin(addCommonVirtuals);
 
 export const Category = model("Category", categorySchema);

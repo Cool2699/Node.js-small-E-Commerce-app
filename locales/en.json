@@ -4,5 +4,19 @@
     "noCategories": "No categories",
     "categoryNotFound": "Category not found",
     "categoryDeletedSuccessfully": "Category deleted successfully",
-    "categoryUpdatedSuccessfully": "Category updated successfully"
+    "categoryUpdatedSuccessfully": "Category updated successfully",
+    "userRegisteredSuccessfully": "User registered successfully",
+    "enterValidEmail": "Please enter a valid email address",
+    "userNameRequired": "Please enter your name",
+    "cityRequired": "Please enter your city",
+    "postalCodeRequired": "Please enter your postal code",
+    "addressRequired": "Please enter your address",
+    "phoneNumberRequired": "Please enter your phone number",
+    "phoneNumberInvalid": "Please enter a valid phone number",
+    "emailAlreadyExists": "Email already exists",
+    "incorrectPassword": "Password is incorrect",
+    "emailDoesNotExist": "Email does not exist",
+    "passwordTooSmall": "Password must not be less than 6 characters",
+    "invalidToken": "Invalid or expired token",
+    "tokenRequired": "Access token is required"
 }
