@@ -1,5 +1,8 @@
 {
     "healthy": "Healthy",
     "categoryNameValidation": "Category must be at least 3 characters long",
-    "noCategories": "No categories"
+    "noCategories": "No categories",
+    "categoryNotFound": "Category not found",
+    "categoryDeletedSuccessfully": "Category deleted successfully",
+    "categoryUpdatedSuccessfully": "Category updated successfully"
 }

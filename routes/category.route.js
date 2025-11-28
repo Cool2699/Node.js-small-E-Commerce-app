@@ -21,11 +21,35 @@ router.get("/", async (req, res) => {
     try {
         const categoriesList = await Category.find();
         if (!categoriesList || categoriesList.length === 0) {
-            return res.send({message: req.t("noCategories")})
+            return res.status(404).send({ message: req.t("noCategories") });
         }
         res.send(categoriesList);
     } catch (error) {
-        res.status(400).send({ message: error.message })
+        res.status(400).send({ message: error.message });
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const category = await Category.findByIdAndDelete(req.params.id);
+        if (!category) {
+            return res.status(404).send({ message: req.t("categoryNotFound") });
+        }
+        res.send({ message: req.t("categoryDeletedSuccessfully") });
+    } catch (error) {
+        res.status(400).send({ message: error.message });
+    }
+});
+
+router.put("/:id", async (req, res) => {
+    try {
+        const category = await Category.findByIdAndUpdate(req.params.id, req.body);
+        if (!category) {
+            return res.status(404).send({ message: req.t("categoryNotFound") });
+        }
+        res.send({ message: req.t("categoryUpdatedSuccessfully") });
+    } catch (error) {
+        res.status(400).send({ message: error.message });
     }
 });
 
