@@ -3,8 +3,8 @@
     "categoryNameValidation": "Category must be at least 3 characters long",
     "noCategories": "No categories",
     "categoryNotFound": "Category not found",
-    "categoryDeletedSuccessfully": "Category deleted successfully",
-    "categoryUpdatedSuccessfully": "Category updated successfully",
+    "categoryDeletedSuccessfully": "Category is deleted successfully",
+    "categoryUpdatedSuccessfully": "Category is updated successfully",
     "userRegisteredSuccessfully": "User registered successfully",
     "enterValidEmail": "Please enter a valid email address",
     "userNameRequired": "Please enter your name",
@@ -18,5 +18,7 @@
     "emailDoesNotExist": "Email does not exist",
     "passwordTooSmall": "Password must not be less than 6 characters",
     "invalidToken": "Invalid or expired token",
-    "tokenRequired": "Access token is required"
+    "tokenRequired": "Access token is required",
+    "userNotFound": "User is not found",
+    "profileUpdatedSuccessfully": "Profile is updated successfully"
 }
