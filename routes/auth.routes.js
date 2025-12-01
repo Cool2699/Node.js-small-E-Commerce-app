@@ -103,6 +103,21 @@ router.put("/profile", async (req, res) => {
     try {
         const userId = req.auth.id;
         const requestBody = req.body;
+
+        if (requestBody.email) {
+            const existingUserByEmail = await User.findOne({
+                email: requestBody.email,
+                _id: { $ne: userId },
+            });
+
+            if (existingUserByEmail) {
+                return res.status(400).json({
+                    success: false,
+                    message: req.t("emailAlreadyExists"),
+                });
+            }
+        }
+
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({
