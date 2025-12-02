@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import {
     registerValidation,
     loginValidation,
+    updateProfileValidation,
     handleValidationErrors,
 } from "../validators/auth.validator.js";
 import { generateToken } from "../helpers/jwt.js";
@@ -99,47 +100,52 @@ router.get("/profile", async (req, res) => {
     }
 });
 
-router.put("/profile", async (req, res) => {
-    try {
-        const userId = req.auth.id;
-        const requestBody = req.body;
+router.put(
+    "/profile",
+    updateProfileValidation,
+    handleValidationErrors,
+    async (req, res) => {
+        try {
+            const userId = req.auth.id;
+            const requestBody = req.body;
 
-        if (requestBody.email) {
-            const existingUserByEmail = await User.findOne({
-                email: requestBody.email,
-                _id: { $ne: userId },
-            });
+            if (requestBody.email) {
+                const existingUserByEmail = await User.findOne({
+                    email: requestBody.email,
+                    _id: { $ne: userId },
+                });
 
-            if (existingUserByEmail) {
-                return res.status(400).json({
+                if (existingUserByEmail) {
+                    return res.status(400).json({
+                        success: false,
+                        message: req.t("emailAlreadyExists"),
+                    });
+                }
+            }
+
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({
                     success: false,
-                    message: req.t("emailAlreadyExists"),
+                    message: req.t("userNotFound"),
                 });
             }
-        }
 
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: req.t("userNotFound"),
+            Object.keys(requestBody).forEach((key) => {
+                user[key] = requestBody[key];
             });
+
+            await user.save();
+
+            res.json({
+                success: true,
+                message: req.t("profileUpdatedSuccessfully"),
+                data: user,
+            });
+        } catch (error) {
+            handleRouteError(res, error);
         }
-
-        Object.keys(requestBody).forEach((key) => {
-            user[key] = requestBody[key];
-        });
-
-        await user.save();
-
-        res.json({
-            success: true,
-            message: req.t("profileUpdatedSuccessfully"),
-            data: user,
-        });
-    } catch (error) {
-        handleRouteError(res, error);
     }
-});
+);
 
 export default router;

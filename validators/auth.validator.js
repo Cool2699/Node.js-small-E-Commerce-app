@@ -7,7 +7,7 @@ export const registerValidation = [
     body("password")
         .isLength({ min: 6 })
         .withMessage((value, { req }) => req.t("passwordTooSmall")),
-    ,
+
     body("role").optional().isIn(["admin", "user"]),
     body("userName")
         .notEmpty()
@@ -36,6 +36,44 @@ export const loginValidation = [
     body("password")
         .isLength({ min: 6 })
         .withMessage((value, { req }) => req.t("passwordTooSmall")),
+];
+
+export const updateProfileValidation = [
+    body("email")
+        .optional()
+        .isEmail()
+        .withMessage((value, { req }) => req.t("enterValidEmail")),
+    body("password")
+        .optional()
+        .isLength({ min: 6 })
+        .withMessage((value, { req }) => req.t("passwordTooSmall")),
+    body("phoneNumber")
+        .optional()
+        .matches(/^\+?[0-9]{10,15}$/)
+        .withMessage((value, { req }) => req.t("phoneNumberInvalid")),
+
+    body("role").optional().isIn(["admin", "user"]),
+    body("userName")
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage((value, { req }) => req.t("userNameRequired")),
+    body("city")
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage((value, { req }) => req.t("cityRequired")),
+    body("postalCode")
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage((value, { req }) => req.t("postalCodeRequired")),
+    body("addressLine1")
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage((value, { req }) => req.t("addressRequired")),
+    body("addressLine1").optional(),
 ];
 
 export const handleValidationErrors = (req, res, next) => {
