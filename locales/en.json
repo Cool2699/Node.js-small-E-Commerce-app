@@ -20,5 +20,7 @@
     "invalidToken": "Invalid or expired token",
     "tokenRequired": "Access token is required",
     "userNotFound": "User is not found",
-    "profileUpdatedSuccessfully": "Profile is updated successfully"
+    "profileUpdatedSuccessfully": "Profile is updated successfully",
+    "authenticationRequired": "Authentication is required",
+    "insufficientPermissions": "Insufficient Permissions"
 }

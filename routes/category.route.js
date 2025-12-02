@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { Category } from "../models/category.model.js";
+import { adminOnly } from "../middleware/roles..middleware.js";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.post("/", adminOnly, async (req, res) => {
     try {
         if (!req.body.name || req.body.name.trim().length < 3) {
             return res.status(400).send({
@@ -29,7 +30,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", adminOnly, async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
         if (!category) {
@@ -41,7 +42,7 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", adminOnly, async (req, res) => {
     try {
         const category = await Category.findByIdAndUpdate(req.params.id, req.body);
         if (!category) {
