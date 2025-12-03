@@ -80,21 +80,59 @@ router.get("/", userAndAdmin, async (req, res) => {
             totalPages: Math.ceil(totalCount / limit),
         };
 
-        const productsList = await Product.find(filter).skip(skip).limit(limit);
+        const productsList = await Product.find(filter)
+            .skip(skip)
+            .limit(limit)
+            .populate("category");
         if (!productsList || productsList.length == 0) {
-            return res
-                .status(201)
-                .send({
-                    message: req.t("noProducts"),
-                    data: [],
-                    ...sharedDataResponse,
-                });
+            return res.status(401).send({
+                message: req.t("noProducts"),
+                data: [],
+                ...sharedDataResponse,
+            });
         }
 
         res.send({
             data: productsList,
             ...sharedDataResponse,
         });
+    } catch (error) {
+        handleRouteError(res, error);
+    }
+});
+
+router.get("/:id", async (req, res) => {
+    try {
+        const product = await Product.findByIdAndUpdate(
+            req.params.id,
+            {
+                $inc: { views: 1 },
+            },
+            { new: true }
+        ).populate("category");
+
+        if (!product) {
+            return res.status(401).send({
+                message: req.t("noProducts"),
+            });
+        }
+
+        return res.send(product);
+    } catch (error) {
+        handleRouteError(res, error);
+    }
+});
+
+router.delete("/:id", adminOnly, async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id);
+        if (!product) {
+            return res.status(404).send({
+                message: req.t("noProducts"),
+            });
+        }
+
+        return res.send({ message: req.t("productDeletedSuccessfully") });
     } catch (error) {
         handleRouteError(res, error);
     }
