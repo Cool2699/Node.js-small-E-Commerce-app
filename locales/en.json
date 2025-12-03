@@ -26,6 +26,19 @@
     "productCreatedSuccessfully": "Product created successfully",
     "fileSizeLimit": "File size limit cannot be more than 5 MBS",
     "fileCountLimit": "File count must be less than 10",
+    "imageFilesAllowedOnly": "Only image files are allowed",
     "unexpectedFile": "Only images are available",
-    "uploadError": "Upload error"
+    "uploadError": "Upload error",
+    "productTitleRequired": "Product title is required",
+    "productTitleLength": "Product title must be between 2 and 100 characters",
+    "categoryRequired": "Category is required",
+    "invalidCategoryId": "Invalid category ID",
+    "priceRequired": "Price is required",
+    "pricePositive": "Price must be a positive number",
+    "descriptionRequired": "Description is required",
+    "descriptionLength": "Description must be between 5 and 1000 characters",
+    "stockCountRequired": "Stock count is required",
+    "stockCountRange": "Stock count must be between 0 and 99999",
+    "ratingCountPositive": "Rating count must be a positive integer",
+    "noProducts": "No products are found"
 }

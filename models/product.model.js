@@ -43,7 +43,7 @@ const productSchema = mongoose.Schema(
                 type: Number,
                 default: 5,
                 min: [1, "Rating cannot be less than 1 star"],
-                max: [1, "Rating cannot be more than 5 stars"],
+                max: [5, "Rating cannot be more than 5 stars"],
             },
             count: {
                 type: Number,
