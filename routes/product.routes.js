@@ -6,7 +6,7 @@ import {
     handleUploadError,
     uploadMultiple,
 } from "../middleware/upload.middleware.js";
-import { adminOnly } from "../middleware/roles..middleware.js";
+import { adminOnly, userAndAdmin } from "../middleware/roles..middleware.js";
 import {
     createProductValidation,
     handleValidationErrors,
@@ -50,10 +50,16 @@ router.post(
     }
 );
 
-router.get("/", async (req, res) => {
+router.get("/", userAndAdmin, async (req, res) => {
     try {
         const search = req.query.search;
         const categoryID = req.query.categoryID;
+
+        // Pagination params
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
         const filter = {};
         if (search) {
             filter.$or = [
@@ -66,11 +72,29 @@ router.get("/", async (req, res) => {
             filter.category = categoryID;
         }
 
-        const productsList = await Product.find(filter);
+        const totalCount = await Product.countDocuments(filter);
+        const sharedDataResponse = {
+            page,
+            limit,
+            totalProducts: totalCount,
+            totalPages: Math.ceil(totalCount / limit),
+        };
+
+        const productsList = await Product.find(filter).skip(skip).limit(limit);
         if (!productsList || productsList.length == 0) {
-            return res.status(201).send({ message: req.t("noProducts") });
+            return res
+                .status(201)
+                .send({
+                    message: req.t("noProducts"),
+                    data: [],
+                    ...sharedDataResponse,
+                });
         }
-        res.send(productsList);
+
+        res.send({
+            data: productsList,
+            ...sharedDataResponse,
+        });
     } catch (error) {
         handleRouteError(res, error);
     }
