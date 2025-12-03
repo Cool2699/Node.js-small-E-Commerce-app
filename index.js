@@ -9,6 +9,7 @@ import morgan from "morgan";
 
 import categoryRouter from "./routes/category.route.js";
 import authRouter from "./routes/auth.routes.js";
+import productRouter from "./routes/product.routes.js";
 import { authMiddleware } from "./middleware/auth.middleware.js";
 
 dotenv.config();
@@ -37,9 +38,12 @@ app.use(
 app.use(json());
 app.use(morgan("tiny")); //Adds a log line for each request, like GET /api/v1/categories 200 183 - 160.765 ms
 app.use(authMiddleware);
+app.use("/public/uploads", express.static("public/uploads"));
 
 app.use(`${api}/categories`, categoryRouter);
 app.use(`${api}/auth`, authRouter);
+app.use(`${api}/products`, productRouter);
+
 app.get(`${api}/health`, (req, res) => {
     res.send(req.t("healthy"));
 });

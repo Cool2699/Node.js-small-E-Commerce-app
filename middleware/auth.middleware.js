@@ -3,7 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const publicRoutes = ["POST:/api/v1/auth/login", "POST:/api/v1/auth/register"];
+const publicRoutes = [
+    "POST:/api/v1/auth/login", 
+    "POST:/api/v1/auth/register",
+    "GET:/public/uploads",    
+];
 
 export const authMiddleware = (req, res, next) => {
     try {

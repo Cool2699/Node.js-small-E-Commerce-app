@@ -22,5 +22,10 @@
     "userNotFound": "User is not found",
     "profileUpdatedSuccessfully": "Profile is updated successfully",
     "authenticationRequired": "Authentication is required",
-    "insufficientPermissions": "Insufficient Permissions"
+    "insufficientPermissions": "Insufficient permissions",
+    "productCreatedSuccessfully": "Product created successfully",
+    "fileSizeLimit": "File size limit cannot be more than 5 MBS",
+    "fileCountLimit": "File count must be less than 10",
+    "unexpectedFile": "Only images are available",
+    "uploadError": "Upload error"
 }
