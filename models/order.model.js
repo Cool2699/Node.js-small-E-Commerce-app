@@ -58,12 +58,10 @@ orderSchema.methods.calculateTotalPrice = function () {
     }, 0);
 };
 
-orderSchema.pre("save", function (next) {
+orderSchema.pre("save", function () {
     if (this.isModified("orderItems") || !this.totalPrice) {
         this.totalPrice = this.calculateTotalPrice();
     }
-
-    next();
 });
 
 orderSchema.plugin(addCommonVirtuals);

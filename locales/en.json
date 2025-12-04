@@ -41,5 +41,13 @@
     "stockCountRange": "Stock count must be between 0 and 99999",
     "ratingCountPositive": "Rating count must be a positive integer",
     "noProducts": "No products are found",
-    "productNotFound": "Product is not found"
+    "productNotFound": "Product is not found",
+    "orderItemsValidation": "Each order item must include both a product and a quantity.",
+    "invalidProductId": "The provided product ID is invalid.",
+    "quantityMustBeAtLeast1": "Quantity must be at least 1.",
+    "quantityMustBeInteger": "Quantity must be an integer.",
+    "orderItemsRequired": "Order items are required",
+    "insufficientStock": "Insufficient stock available",
+    "orderCreatedSuccessfully": "Order created successfully",
+    "productsNotFound": "Products are not found"
 }
