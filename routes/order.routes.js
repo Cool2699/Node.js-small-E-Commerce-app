@@ -4,6 +4,7 @@ import { handleRouteError } from "../helpers/error-handling.js";
 import { adminOnly, userAndAdmin } from "../middleware/roles..middleware.js";
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
+import { orderStatuses } from "../constants/order.constants.js";
 
 const router = express.Router();
 
@@ -221,6 +222,42 @@ router.delete("/:id", adminOnly, async (req, res) => {
 
         return res.json({
             message: req.t("orderDeletedSuccessfully"),
+        });
+    } catch (error) {
+        handleRouteError(res, error);
+    }
+});
+
+router.patch("/:id/change-status", adminOnly, async (req, res) => {
+    try {
+        const { status } = req.body;
+        if (!status) {
+            return res.status(400).json({
+                message: req.t("statusRequired"),
+            });
+        }
+
+        if (!orderStatuses.includes(status)) {
+            return res.status(400).json({
+                message: req.t("invalidStatus"),
+            });
+        }
+
+        const updatedOrder = await OrderModel.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            return res.status(403).json({
+                message: req.t("orderNotFound"),
+            });
+        }
+
+        res.json({
+            message: req.t("orderStatusUpdatedSuccessfully"),
+            data: updatedOrder,
         });
     } catch (error) {
         handleRouteError(res, error);

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { addCommonVirtuals } from "../helpers/mongoose-plugin.js";
+import { orderStatuses } from "../constants/order.constants.js";
 
 const orderItemSchema = mongoose.Schema({
     product: {
@@ -30,13 +31,7 @@ const orderSchema = mongoose.Schema(
         status: {
             type: String,
             enum: {
-                values: [
-                    "pending",
-                    "processing",
-                    "shipped",
-                    "delivered",
-                    "cancelled",
-                ],
+                values: orderStatuses,
                 message:
                     'Status must be one of: "pending", "processing", "shipped", "delivered", "cancelled"',
             },
