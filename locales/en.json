@@ -49,5 +49,7 @@
     "orderItemsRequired": "Order items are required",
     "insufficientStock": "Insufficient stock available",
     "orderCreatedSuccessfully": "Order created successfully",
-    "productsNotFound": "Products are not found"
+    "productsNotFound": "Products are not found",
+    "orderNotFound": "Order is not found",
+    "accessDeniedOwnOrdersOnly": "Access is denied. You can see only your orders."
 }

@@ -176,4 +176,35 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/:id", userAndAdmin, async (req, res) => {
+    try {
+        const order = await OrderModel.findById(req.params.id)
+            .populate(
+                "user",
+                "userName email phone city postalCode addressLine1 addressLine2"
+            )
+            .populate(
+                "orderItems.product",
+                "title price images countInStock rating views"
+            );
+
+        if (!order) {
+            return res.status(404).json({
+                message: req.t("orderNotFound"),
+            });
+        }
+
+        const { auth: currentUser } = req;
+        if (currentUser.role !== "admin" && currentUser.id !== order.user._id.toString()) {
+            return res.status(403).json({
+                message: req.t("accessDeniedOwnOrdersOnly"),
+            });
+        }
+
+        res.json(order);
+    } catch (error) {
+        handleRouteError(res, error);
+    }
+});
+
 export default router;
