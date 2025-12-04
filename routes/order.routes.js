@@ -1,7 +1,7 @@
 import express from "express";
 import { OrderModel } from "../models/order.model.js";
 import { handleRouteError } from "../helpers/error-handling.js";
-import { userAndAdmin } from "../middleware/roles..middleware.js";
+import { adminOnly, userAndAdmin } from "../middleware/roles..middleware.js";
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 
@@ -195,13 +195,33 @@ router.get("/:id", userAndAdmin, async (req, res) => {
         }
 
         const { auth: currentUser } = req;
-        if (currentUser.role !== "admin" && currentUser.id !== order.user._id.toString()) {
+        if (
+            currentUser.role !== "admin" &&
+            currentUser.id !== order.user._id.toString()
+        ) {
             return res.status(403).json({
                 message: req.t("accessDeniedOwnOrdersOnly"),
             });
         }
 
-        res.json(order);
+        return res.json(order);
+    } catch (error) {
+        handleRouteError(res, error);
+    }
+});
+
+router.delete("/:id", adminOnly, async (req, res) => {
+    try {
+        const order = await OrderModel.findByIdAndDelete(req.params.id);
+        if (!order) {
+            return res.status(403).json({
+                message: req.t("orderNotFound"),
+            });
+        }
+
+        return res.json({
+            message: req.t("orderDeletedSuccessfully"),
+        });
     } catch (error) {
         handleRouteError(res, error);
     }
