@@ -10,6 +10,7 @@ import { adminOnly, userAndAdmin } from "../middleware/roles..middleware.js";
 import {
     createProductValidation,
     handleValidationErrors,
+    updateProductValidation,
 } from "../validators/product-validator.js";
 
 const router = express.Router();
@@ -43,6 +44,64 @@ router.post(
                 success: true,
                 message: req.t("productCreatedSuccessfully"),
                 date: newProduct,
+            });
+        } catch (error) {
+            handleRouteError(res, error);
+        }
+    }
+);
+
+router.put(
+    "/:id",
+    adminOnly,
+    updateProductValidation,
+    handleValidationErrors,
+    uploadMultiple,
+    handleUploadError,
+    async (req, res) => {
+        try {
+            const existingProduct = await Product.findById(req.params.id);
+            if (!existingProduct) {
+                return res.status(404).send({
+                    message: req.t("productNotFound"),
+                });
+            }
+
+            const updateData = {};
+            const requestBody = req.body;
+            Object.keys(requestBody).forEach((key) => {
+                updateData[key] = requestBody[key];
+            });
+
+            if (req.files && req.files.length > 0) {
+                const imageURLs = req.files.map((file) => {
+                    getFileURL(req, file.filename);
+                });
+
+                if (req.body.replaceImages) {
+                    updateData.images = imageURLs;
+                } else {
+                    updateData.images = [
+                        ...existingProduct.images,
+                        ...imageURLs,
+                    ];
+                    S;
+                }
+            }
+
+            const updatedProduct = await Product.findByIdAndUpdate(
+                req.params.id,
+                updateData,
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            ).populate("category");
+
+            return res.status(200).json({
+                success: true,
+                message: req.t("productUpdatedSuccessfully"),
+                data: updatedProduct,
             });
         } catch (error) {
             handleRouteError(res, error);
@@ -113,7 +172,7 @@ router.get("/:id", async (req, res) => {
 
         if (!product) {
             return res.status(401).send({
-                message: req.t("noProducts"),
+                message: req.t("productNotFound"),
             });
         }
 
@@ -128,7 +187,7 @@ router.delete("/:id", adminOnly, async (req, res) => {
         const product = await Product.findByIdAndDelete(req.params.id);
         if (!product) {
             return res.status(404).send({
-                message: req.t("noProducts"),
+                message: req.t("productNotFound"),
             });
         }
 

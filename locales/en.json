@@ -40,5 +40,6 @@
     "stockCountRequired": "Stock count is required",
     "stockCountRange": "Stock count must be between 0 and 99999",
     "ratingCountPositive": "Rating count must be a positive integer",
-    "noProducts": "No products are found"
+    "noProducts": "No products are found",
+    "productNotFound": "Product is not found"
 }
