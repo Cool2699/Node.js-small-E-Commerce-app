@@ -55,5 +55,8 @@
     "orderDeletedSuccessfully": "Order is deleted successfully",
     "statusRequired": "Status is required",
     "invalidStatus": "Status is invalid",
-    "orderStatusUpdatedSuccessfully": "Order status is updated successfully"
+    "orderStatusUpdatedSuccessfully": "Order status is updated successfully",
+    "orderAlreadyCancelled": "Order is already cancelled",
+    "cannotCancelOrder": "Order cannot be cancelled for shipped or delivered status",
+    "orderCancelledSuccessfully": "Order is cancelled successfully"
 }

@@ -1,7 +1,11 @@
 import express from "express";
 import { OrderModel } from "../models/order.model.js";
 import { handleRouteError } from "../helpers/error-handling.js";
-import { adminOnly, userAndAdmin } from "../middleware/roles..middleware.js";
+import {
+    adminOnly,
+    userAndAdmin,
+    userOnly,
+} from "../middleware/roles..middleware.js";
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import { orderStatuses } from "../constants/order.constants.js";
@@ -262,6 +266,54 @@ router.patch("/:id/change-status", adminOnly, async (req, res) => {
     } catch (error) {
         handleRouteError(res, error);
     }
+});
+
+router.patch("/:id/cancel-order", userOnly, async (req, res) => {
+    const { auth: currentUser } = req;
+    const orderId = req.params.id;
+
+    const order = await OrderModel.findById(orderId);
+    if (!order) {
+        return res.status(403).json({
+            message: req.t("orderNotFound"),
+        });
+    }
+
+    if (order.user.toString() !== currentUser.id) {
+        return res.status(403).json({
+            message: req.t("accessDeniedOwnOrdersOnly"),
+        });
+    }
+
+    const status = order.status;
+    if (status === "cancelled") {
+        return res.status(400).json({
+            message: req.t("orderAlreadyCancelled"),
+        });
+    }
+
+    if (status === "shipped" || status === "delivered") {
+        return res.status(400).json({
+            message: req.t("cannotCancelOrder"),
+        });
+    }
+
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+        req.params.id,
+        { status: "cancelled" },
+        { new: true }
+    );
+
+    for (const item of order.orderItems) {
+        await Product.findByIdAndUpdate(item.product, {
+            $inc: { countInStock: item.quantity },
+        });
+    }
+
+    return res.json({
+        message: req.t("orderCancelledSuccessfully"),
+        data: updatedOrder
+    })
 });
 
 export default router;
